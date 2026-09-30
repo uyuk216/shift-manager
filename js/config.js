@@ -1,5 +1,5 @@
-// Supabase の Project URL と anon (publishable) key を入れる。
-// anon key は公開して問題ないキー（データ保護は supabase/schema.sql の RLS で行う）。
-// 空のままなら、ログインなし・ブラウザ保存の「ローカルモード」で動く。
-export const SUPABASE_URL = '';
-export const SUPABASE_ANON_KEY = '';
+// Supabase の Project URL と publishable (anon) key。
+// このキーは公開して問題ない（データ保護は supabase/schema.sql の RLS で行う）。
+// フォークして使う人は自分のプロジェクトの値に置き換える。空ならローカルモードで動く。
+export const SUPABASE_URL = 'https://hcuuvvbjfrqoytuwzfab.supabase.co';
+export const SUPABASE_ANON_KEY = 'sb_publishable_caI55qLjA9LYCmkHeL7tCw_SOM1Gm_2';

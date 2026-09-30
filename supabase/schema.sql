@@ -23,6 +23,8 @@ create table if not exists public.shifts (
   note text not null default ''
 );
 create index if not exists shifts_user_date on public.shifts (user_id, date);
+create index if not exists shifts_workplace on public.shifts (workplace_id);
+create index if not exists workplaces_user on public.workplaces (user_id);
 
 alter table public.settings enable row level security;
 alter table public.workplaces enable row level security;
