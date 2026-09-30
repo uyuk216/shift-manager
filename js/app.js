@@ -8,7 +8,7 @@ const pad = (n) => String(n).padStart(2, '0');
 const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 const COLORS = ['#3b6cf6', '#e2586b', '#2e9e6b', '#e0932b', '#8b5cf6', '#0ea5b7'];
 
-const S = { session: null, tab: 'cal', month: new Date(new Date().getFullYear(), new Date().getMonth(), 1), settings: DEFAULT_SETTINGS, workplaces: [], shifts: [], authMsg: '', authMode: 'in' };
+const S = { session: null, tab: 'cal', month: new Date(new Date().getFullYear(), new Date().getMonth(), 1), settings: DEFAULT_SETTINGS, workplaces: [], shifts: [] };
 const dlg = $('#dlg');
 
 const wpOf = (id) => S.workplaces.find((w) => w.id === id);
@@ -45,28 +45,16 @@ function render() {
 }
 
 function authView() {
-  return `<div class="card" style="max-width:380px;margin:12vh auto">
+  return `<div class="card" style="max-width:380px;margin:12vh auto;text-align:center">
   <h1 style="font-size:20px;margin-top:0">📅 シフト管理</h1>
-  <label>メールアドレス</label><input id="em" type="email" autocomplete="email">
-  <label>パスワード（8文字以上）</label><input id="pw" type="password" autocomplete="${S.authMode === 'in' ? 'current-password' : 'new-password'}">
-  <div class="msg" id="am">${esc(S.authMsg)}</div>
-  <div class="actions" style="justify-content:stretch">
-    <button class="pri" id="go" style="flex:1">${S.authMode === 'in' ? 'ログイン' : '新規登録'}</button></div>
-  <div class="actions" style="justify-content:stretch"><button id="gg" style="flex:1">Google でログイン</button></div>
-  <p class="mut" style="text-align:center"><a href="#" id="sw">${S.authMode === 'in' ? 'アカウントを作る' : 'ログインに戻る'}</a></p></div>`;
+  <p class="mut">Google アカウントでログインします</p>
+  <div class="msg" id="am"></div>
+  <button class="pri" id="gg" style="width:100%">Google でログイン</button></div>`;
 }
 function bindAuth() {
-  $('#sw').onclick = (e) => { e.preventDefault(); S.authMode = S.authMode === 'in' ? 'up' : 'in'; S.authMsg = ''; render(); };
   $('#gg').onclick = async () => {
     const { error } = await store.signInGoogle();
     if (error) $('#am').textContent = error.message;
-  };
-  $('#go').onclick = async () => {
-    const email = $('#em').value.trim(), pw = $('#pw').value;
-    if (!email || pw.length < 8) return ($('#am').textContent = 'メールと8文字以上のパスワードを入力してください');
-    const { data, error } = await (S.authMode === 'in' ? store.signIn(email, pw) : store.signUp(email, pw));
-    if (error) return ($('#am').textContent = error.message);
-    if (S.authMode === 'up' && !data.session) { S.authMsg = '確認メールを送りました。リンクを開いてからログインしてください。'; S.authMode = 'in'; render(); }
   };
 }
 
