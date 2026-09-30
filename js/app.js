@@ -52,10 +52,15 @@ function authView() {
   <div class="msg" id="am">${esc(S.authMsg)}</div>
   <div class="actions" style="justify-content:stretch">
     <button class="pri" id="go" style="flex:1">${S.authMode === 'in' ? 'ログイン' : '新規登録'}</button></div>
+  <div class="actions" style="justify-content:stretch"><button id="gg" style="flex:1">Google でログイン</button></div>
   <p class="mut" style="text-align:center"><a href="#" id="sw">${S.authMode === 'in' ? 'アカウントを作る' : 'ログインに戻る'}</a></p></div>`;
 }
 function bindAuth() {
   $('#sw').onclick = (e) => { e.preventDefault(); S.authMode = S.authMode === 'in' ? 'up' : 'in'; S.authMsg = ''; render(); };
+  $('#gg').onclick = async () => {
+    const { error } = await store.signInGoogle();
+    if (error) $('#am').textContent = error.message;
+  };
   $('#go').onclick = async () => {
     const email = $('#em').value.trim(), pw = $('#pw').value;
     if (!email || pw.length < 8) return ($('#am').textContent = 'メールと8文字以上のパスワードを入力してください');
